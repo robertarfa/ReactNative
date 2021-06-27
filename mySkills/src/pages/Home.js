@@ -2,13 +2,26 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Platform,
+  FlatList,
+} from 'react-native';
 import {Button} from '../components/Button';
 import SkillCard from '../components/SkillCard';
 
 export function Home() {
   const [newSkill, setNewSkill] = useState('');
-  const [mySkills, setMySkills] = useState([]);
+  const [mySkills, setMySkills] = useState([
+    'JavaScript',
+    'ReactJS',
+    'ReactNative',
+    'Kotlin',
+    'SQL',
+  ]);
 
   function handleAddNewSkill() {
     setMySkills(oldState => [...oldState, newSkill]);
@@ -31,9 +44,11 @@ export function Home() {
 
       <Text style={[styles.title, {marginVertical: 30}]}>My Skills</Text>
 
-      {mySkills.map(skill => (
-        <SkillCard key={skill} skill={skill} />
-      ))}
+      <FlatList
+        data={mySkills}
+        keyExtractor={item => item}
+        renderItem={({item}) => <SkillCard skill={item} />}
+      />
     </View>
   );
 }
@@ -43,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#121015',
     paddingHorizontal: 30,
-    paddingVertical: 70,
+    paddingVertical: 30,
   },
   title: {
     color: '#fff',
