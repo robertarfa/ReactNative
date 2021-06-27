@@ -3,8 +3,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Platform} from 'react-native';
-import {Button} from './components/Button';
-import SkillCard from './components/SkillCard';
+import {Button} from '../components/Button';
+import SkillCard from '../components/SkillCard';
 
 export function Home() {
   const [newSkill, setNewSkill] = useState('');
@@ -14,8 +14,6 @@ export function Home() {
     setMySkills(oldState => [...oldState, newSkill]);
     setNewSkill('');
   }
-
-  console.log({mySkills, newSkill});
 
   return (
     <View style={styles.container}>
@@ -34,7 +32,7 @@ export function Home() {
       <Text style={[styles.title, {marginVertical: 30}]}>My Skills</Text>
 
       {mySkills.map(skill => (
-        <SkillCard skill={skill} />
+        <SkillCard key={skill} skill={skill} />
       ))}
     </View>
   );
