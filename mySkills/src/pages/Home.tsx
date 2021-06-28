@@ -22,6 +22,7 @@ export function Home() {
   const [greeting, setGreeting] = useState('');
   const [newSkill, setNewSkill] = useState('');
   const [mySkills, setMySkills] = useState<SkillData[]>([]);
+const [requiredField, setRequiredField] = useState(false)
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -36,13 +37,29 @@ export function Home() {
   }, []);
 
   function handleAddNewSkill() {
-    const data ={
+    const data = {
       id: String(new Date().getTime()),
-      name: newSkill
-    }
+      name: newSkill,
+    };
     
-    setMySkills(oldState => [...oldState, data]);
-    setNewSkill('');
+    if (newSkill !== ''){
+      console.log('data', data)
+      setMySkills(oldState => [...oldState, data]);
+      setNewSkill('');
+    } else {
+      setRequiredField(true);
+
+      setTimeout(() => {
+        setRequiredField(false);
+      }, 3000);
+    }
+  }
+
+  function handleRemoveSkill(id: string){
+    console.log('logs id', id);
+    setMySkills(oldState => oldState.filter(
+      skill => skill.id !== id
+    ));
   }
 
   return (
@@ -58,14 +75,24 @@ export function Home() {
         onChangeText={setNewSkill}
       />
 
-      <Button onPress={handleAddNewSkill} />
+      <Text style={styles.required}>
+        {requiredField && 'Campo Obrigatorio'}
+        </Text>
+
+      <Button  title={'Add'} onPress={handleAddNewSkill} />
 
       <Text style={[styles.title, {marginVertical: 30}]}>My Skills</Text>
 
       <FlatList
         data={mySkills}
         keyExtractor={item => item.id}
-        renderItem={({item}) => <SkillCard skill={item.name} />}
+        renderItem={
+          ({item}) =>
+         <SkillCard 
+         skill={item.name} 
+         onPress={() => handleRemoveSkill(item.id)}
+         />
+        }
       />
     </View>
   );
@@ -94,4 +121,7 @@ const styles = StyleSheet.create({
   greetings: {
     color: '#fff',
   },
+  required:{
+    color: 'red'
+  }
 });
